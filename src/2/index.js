@@ -70,7 +70,7 @@ let running = true;
 let output;
 while (running && i < program.length) {
   [program, running] = programs[program[i]](i, program);
-  console.log(program[i + 1], program[i + 2], 100 * program[i + 1] + program[i + 2]);
+  console.log(i, program[i + 1], program[i + 2], 100 * program[i + 1] + program[i + 2]);
   i += 4;
 }
 
