@@ -51,26 +51,26 @@ const path = require('path');
 const txt = fs.readFileSync(path.resolve(__dirname, 'data.txt'), 'utf-8');
 let program = txt.split(',').map(Number);
 
-const add = (pInput1, pInput2, pOutput, program) => {
-  program[pOutput] = program[pInput1] + program[pInput2];
-  return program;
-};
-
-const multiply = (pInput1, pInput2, pOutput, program) => {
-  program[pOutput] = program[pInput1] * program[pInput2];
-  return program;
-};
-
 const programs = {
-  1: (i, program) => [add(program[i + 1], program[i + 2], program[i + 3], program), true],
-  2: (i, program) => [multiply(program[i + 1], program[i + 2], program[i + 3], program), true],
+  1: (i, program) => {
+    const output = program[program[i + 1]] + program[program[i + 2]];
+    program[program[i + 3]] = output;
+    return [program, true];
+  },
+  2: (i, program) => {
+    const output = program[program[i + 1]] * program[program[i + 2]];
+    program[program[i + 3]] = output;
+    return [program, true];
+  },
   99: () => [program, false]
 };
 
 let i = 0;
 let running = true;
+let output;
 while (running && i < program.length) {
   [program, running] = programs[program[i]](i, program);
+  console.log(program[i + 1], program[i + 2], 100 * program[i + 1] + program[i + 2]);
   i += 4;
 }
 
