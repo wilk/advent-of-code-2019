@@ -81,12 +81,11 @@ const directions = txt.split('\n');
 const firstCableInstructions = directions[0].split(',');
 const secondCableInstructions = directions[1].split(',');
 
-console.log(firstCableInstructions);
-console.log(secondCableInstructions);
-
 let x = 0;
 let y = 0;
-const matrix = { 0: { 0: 0 } };
+let totalFirstSteps = 0;
+let totalSecondSteps = 0;
+const matrix = { 0: { 0: { val: 0, steps: 0 } } };
 
 for (let i = 0; i < firstCableInstructions.length; i++) {
   const instruction = firstCableInstructions[i];
@@ -95,29 +94,33 @@ for (let i = 0; i < firstCableInstructions.length; i++) {
     case 'R':
       for (let j = 0; j < steps; j++) {
         x++;
+        totalFirstSteps++;
         if (!matrix[x]) matrix[x] = {};
-        matrix[x][y] = 0;
+        if (!matrix[x][y]) matrix[x][y] = { val: 0, steps: totalFirstSteps };
       }
       break;
     case 'L':
       for (let j = 0; j < steps; j++) {
         x--;
+        totalFirstSteps++;
         if (!matrix[x]) matrix[x] = {};
-        matrix[x][y] = 0;
+        if (!matrix[x][y]) matrix[x][y] = { val: 0, steps: totalFirstSteps };
       }
       break;
     case 'U':
       for (let j = 0; j < steps; j++) {
         y++;
+        totalFirstSteps++;
         if (!matrix[x]) matrix[x] = {};
-        matrix[x][y] = 0;
+        if (!matrix[x][y]) matrix[x][y] = { val: 0, steps: totalFirstSteps };
       }
       break;
     case 'D':
       for (let j = 0; j < steps; j++) {
         y--;
+        totalFirstSteps++;
         if (!matrix[x]) matrix[x] = {};
-        matrix[x][y] = 0;
+        if (!matrix[x][y]) matrix[x][y] = { val: 0, steps: totalFirstSteps };
       }
       break;
   }
@@ -127,6 +130,7 @@ x = 0;
 y = 0;
 
 let closerDistance = Number.POSITIVE_INFINITY;
+let fewerSteps = Number.POSITIVE_INFINITY;
 for (let i = 0; i < secondCableInstructions.length; i++) {
   const instruction = secondCableInstructions[i];
   const steps = parseInt(instruction.substring(1, instruction.length));
@@ -134,44 +138,52 @@ for (let i = 0; i < secondCableInstructions.length; i++) {
     case 'R':
       for (let j = 0; j < steps; j++) {
         x++;
-        if (matrix[x] && matrix[x][y] === 0) {
-          matrix[x][y] = 1;
+        totalSecondSteps++;
+        if (matrix[x] && matrix[x][y] && matrix[x][y].val === 0) {
+          matrix[x][y].val = 1;
           const distance = Math.abs(x) + Math.abs(y);
-          console.log(`(${x}, ${y}) - 1 - ${distance} [${closerDistance}]`);
           if (distance < closerDistance) closerDistance = distance;
+          const totalSteps = matrix[x][y].steps + totalSecondSteps;
+          if (totalSteps < fewerSteps) fewerSteps = totalSteps;
         }
       }
       break;
     case 'L':
       for (let j = 0; j < steps; j++) {
         x--;
-        if (matrix[x] && matrix[x][y] === 0) {
-          matrix[x][y] = 1;
+        totalSecondSteps++;
+        if (matrix[x] && matrix[x][y] && matrix[x][y].val === 0) {
+          matrix[x][y].val = 1;
           const distance = Math.abs(x) + Math.abs(y);
-          console.log(`(${x}, ${y}) - 1 - ${distance} [${closerDistance}]`);
           if (distance < closerDistance) closerDistance = distance;
+          const totalSteps = matrix[x][y].steps + totalSecondSteps;
+          if (totalSteps < fewerSteps) fewerSteps = totalSteps;
         }
       }
       break;
     case 'U':
       for (let j = 0; j < steps; j++) {
         y++;
-        if (matrix[x] && matrix[x][y] === 0) {
-          matrix[x][y] = 1;
+        totalSecondSteps++;
+        if (matrix[x] && matrix[x][y] && matrix[x][y].val === 0) {
+          matrix[x][y].val = 1;
           const distance = Math.abs(x) + Math.abs(y);
-          console.log(`(${x}, ${y}) - 1 - ${distance} [${closerDistance}]`);
           if (distance < closerDistance) closerDistance = distance;
+          const totalSteps = matrix[x][y].steps + totalSecondSteps;
+          if (totalSteps < fewerSteps) fewerSteps = totalSteps;
         }
       }
       break;
     case 'D':
       for (let j = 0; j < steps; j++) {
         y--;
-        if (matrix[x] && matrix[x][y] === 0) {
-          matrix[x][y] = 1;
+        totalSecondSteps++;
+        if (matrix[x] && matrix[x][y] && matrix[x][y].val === 0) {
+          matrix[x][y].val = 1;
           const distance = Math.abs(x) + Math.abs(y);
-          console.log(`(${x}, ${y}) - 1 - ${distance} [${closerDistance}]`);
           if (distance < closerDistance) closerDistance = distance;
+          const totalSteps = matrix[x][y].steps + totalSecondSteps;
+          if (totalSteps < fewerSteps) fewerSteps = totalSteps;
         }
       }
       break;
@@ -179,3 +191,4 @@ for (let i = 0; i < secondCableInstructions.length; i++) {
 }
 
 console.log(closerDistance);
+console.log(fewerSteps);
