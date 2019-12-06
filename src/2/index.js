@@ -90,7 +90,6 @@ const programs = {
 
 let i = 0;
 let running = true;
-let output;
 while (running && i < program.length) {
   [program, running] = programs[program[i]](i, program);
   i += 4;
